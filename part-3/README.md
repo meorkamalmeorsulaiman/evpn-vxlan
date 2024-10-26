@@ -45,7 +45,7 @@ interface loopback110
   ip router ospf 65100 area 0.0.0.0
   ip pim sparse-mode
 ```
-We introduce new interface on the spine for the RP address. Let's validate the multicast
+We introduce new interface on the spine for the RP address. Let's validate the RP configs:
 
 Anycast RP member:
 ```
@@ -87,7 +87,7 @@ RP: 10.10.10.110, (0),
  group ranges:
  224.0.0.0/4
 ```
-We are not having any multicast received yet, thus the mroute cache will be empty. 
+We are not having any multicast stream yet, thus the mroute will be empty. 
 
 ## Turning on VLAN100 Endpoint
 
