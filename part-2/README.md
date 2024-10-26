@@ -137,7 +137,18 @@ Interface VNI      Multicast-group   State Mode Type [BD/VRF]      Flags
 nve1      2000     UnicastStatic     Up    DP   L2 [200]
 ```
 Looking at the previous `NVE` interface configuration which specify `ingress-replication protocol static` This is a mode for the VxLAN tunnel to replicate any data plane traffic toward the remote tunnel. 
-Example, an arp request received by `leaf03` from `host09` will replicated to `leaf10`. You can add more peers on the `NVE` interace as the remote VxLAN tunnel and the data plane traffic will then replicate to all the `NVE` peers. 
-At some point we have many peers essentially become full mesh? Let's continue in part-3.
+Example, an arp request received by `leaf03` from `host09` will replicated to `leaf10`. You can add more peers on the `NVE` interace as the remote VxLAN tunnel and the data plane traffic will then replicate to all the `NVE` peers. You can see the `NVE` peer:
+
+```
+leaf03# show nve vni in
+ingress-replication   interface             
+leaf03# show nve vni ingress-replication 
+Interface VNI      Replication List  Source  Up Time      
+--------- -------- ----------------- ------- -------      
+
+nve1      2000     10.10.10.4        CLI     00:37:53
+```
+
+At some point we may have many peers then will become full mesh? Let's continue in part-3.
 
 
