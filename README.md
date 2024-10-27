@@ -1,10 +1,6 @@
 # EVPN-VxLAN
 
-This will the learning notes for EVPN VxLAN
-
-## Lab Setup
-
-The lab setup will consist of 2 spines and 3 leaf switches that stretch two layer-2 domains - 100 & 200. Below are the topology:
+This will the learning notes for EVPN VxLAN. The lab setup will consist of 2 spines and 3 leaf switches that stretch two layer-2 domains - 100 & 200. Below are the topology:
 
 ![Topology](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/main/images/topology.jpg)
 
@@ -23,7 +19,6 @@ Loopbacks and MAC details
 | host09   | 192.168.200.9  | aabb.cc00.9000 |
 | host10   | 192.168.200.10 | aabb.cc00.a000 |
 
-## Section
 
 We device the lab into separated section:
 - Part-1: Building the underlay
