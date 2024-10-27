@@ -4,7 +4,7 @@ This will the learning notes for EVPN VxLAN
 
 ## Lab Setup
 
-The lab setup will consist of 2 spines and 3 leaf switches that stretch a 2 VLAN - 100 & 200. Below are the topology:
+The lab setup will consist of 2 spines and 3 leaf switches that stretch two layer-2 domains - 100 & 200. Below are the topology:
 
 ![Topology](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/main/images/topology.jpg)
 
