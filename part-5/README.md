@@ -20,7 +20,6 @@ There are 2 mode of IRB:
 - Symmetric
 - Asymmetric
 
-In symmetric, both ingress and egress switches perform MAC and IP lookup. But inter-subnet forwarding between IP-VRF table and for asymmetric, the forwarding for inter-subnet was done thru MAC-VRF table. 
 They are different, more details [RFC 9135](https://www.rfc-editor.org/rfc/rfc9135.html#name-symmetric-and-asymmetric-ir) In the case of EVPN-VxLAN, symetric IRB is enough. 
 Example, when the data plane hit the ingress leaf. It will perform lookup on the IP-VRF table and then encapsulate into an IP packet (VxLAN) including ingress and egress MAC address. Then sent it to the remote leaf. Later the remote leaf will perform lookup on the IP-VRF table. 
 As mentioned earlier, each MAC-VRF table associated with IP-VRF and therefore, the switch will know the correct MAC/IP. In symmetric IRB, the local switch doesn't need to store the remote MAC address entry - Why? This is because it is learnt thru EVPN.
@@ -89,9 +88,6 @@ vrf context TN-A
     route-target both auto
     route-target both auto evpn
   vni 10000
-router bgp 65100
-  vrf TN-A
-    address-family ipv4 unicast
 ```
 
 Configure default-gateway
@@ -195,4 +191,136 @@ Route Distinguisher: 10.10.10.3:3    (L3VNI 10000)
 The L3VNI correct, that's are the remote endpoint from other leaf switch. Based on the steps, we can see that when we enable L3 service. The MAC/IP get's advertised and when we enabled 2nd gateway. We started to see the IP-VRF table. 
 The IP-VRF table rd derive from `Router ID` + `VRF ID`
 
+```
+leaf03# show vrf Tn-A 
+VRF-Name                           VRF-ID State   Reason                        
+TN-A                                    3 Up      --
+```
 
+Let's ping from `VLAN100` to `VLAN200`
+```
+host06#ping 192.168.200.10
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.200.10, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 11/29/96 ms
+```
+It work's
+
+## Digest
+
+When the MAC/IP learnt on `leaf03`, the switch added into the MAC-VRF and IP-VRF (IP). But the arp table doesn't store
+
+leaf03
+```
+leaf03# show ip arp vrf Tn-A | be Address
+Address         Age       MAC Address     Interface       Flags
+192.168.100.6   00:18:14  aabb.cc00.6000  Vlan100                  
+192.168.200.9   00:00:30  aabb.cc00.9000  Vlan200   
+```
+
+leaf04
+```
+leaf04# show ip arp vrf TN-A | be Address
+Address         Age       MAC Address     Interface       Flags
+192.168.100.7   00:11:02  aabb.cc00.7000  Vlan100                  
+192.168.200.10  00:03:44  aabb.cc00.a000  Vlan200
+```
+
+Then the switch advertise the route type-2 with an IP address. The will be 2 labels - MPLS-LABEL1 and MPLS-LABEL2, where LABEL2 is the L3VNI. The RT will also include the associated IP-VRF table - `RT:65100:10000`
+```
+leaf03# show bgp l2vpn evpn rd 10.10.10.3:32867 192.168.100.6 | be entry
+BGP routing table entry for [2]:[0]:[0]:[48]:[aabb.cc00.6000]:[32]:[192.168.100.6]/272, version 78
+Paths: (1 available, best #1)
+Flags: (0x000102) (high32 00000000) on xmit-list, is not in l2rib/evpn
+
+  Advertised path-id 1
+  Path type: local, path is valid, is best path, no labeled nexthop
+  AS-Path: NONE, path locally originated
+    10.10.10.3 (metric 0) from 0.0.0.0 (10.10.10.3)
+      Origin IGP, MED not set, localpref 100, weight 32768
+      Received label 1000 10000
+      Extcommunity: RT:65100:1000 RT:65100:10000 ENCAP:8 Router MAC:5003.0000.1b08
+
+  Path-id 1 advertised to peers:
+    10.10.10.1         10.10.10.2
+```
+
+With these two items, the remote PE will then now what the route mean. When the remote PE received, it will check the MAC-VRF RT and imported to correct table. The IP-VRF RT use to identify the ccorect IP-VRF and get's imported. 
+We can see from `leaf04`, the route for `host06`
+```
+leaf04# show ip route 192.168.100.6 vrf TN-A 
+IP Route Table for VRF "TN-A"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
+
+192.168.100.6/32, ubest/mbest: 1/0
+    *via 10.10.10.3%default, [200/0], 00:39:57, bgp-65100, internal, tag 65100, 
+segid: 10000 tunnelid: 0xa0a0a03 encap: VXLAN
+```
+
+When a packet flow from `leaf03` to `leaf04`, the ingress PE will perform destination mac lookup on the local switch and find out that is it a IRB interface mac address.
+```
+leaf03# show mac address-table vlan 200 | i a000
+C  200     aabb.cc00.a000   dynamic  NA         F      F    nve1(10.10.10.4)
+```
+
+If it was learnt from VxLAN tunnel, then the switch now look at the mode
+```
+leaf03# show nve peers 
+Interface Peer-IP                                 State LearnType Uptime   Router-Mac       
+--------- --------------------------------------  ----- --------- -------- -----------------
+nve1      10.10.10.4                              Up    CP        00:55:50 5004.0000.1b08   
+nve1      10.10.10.5                              Up    CP        00:55:50 5005.0000.1b08
+leaf03# show nve peers detail 
+Details of nve Peers:
+----------------------------------------
+Peer-Ip: 10.10.10.4
+    NVE Interface       : nve1
+    Peer State          : Up
+    Peer Uptime         : 00:57:09
+    Router-Mac          : 5004.0000.1b08
+    Peer First VNI      : 1000
+    Time since Create   : 00:57:09
+    Configured VNIs     : 1000,2000,10000
+    Provision State     : peer-add-complete
+    Learnt CP VNIs      : 1000,2000,10000
+    vni assignment mode : SYMMETRIC
+    Peer Location       : N/A
+```
+
+The switch will perform IP loookup in the associated IP-VRF table and will now encapsulate the packet with the nexthop as the VxLAN outher destination IP with VNI `10000` instead of `1000`.
+```
+leaf03# show ip route 192.168.200.10 vrf TN-A 
+IP Route Table for VRF "TN-A"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
+
+192.168.200.10/32, ubest/mbest: 1/0
+    *via 10.10.10.4%default, [200/0], 00:58:38, bgp-65100, internal, tag 65100, segid: 10000 tunnelid: 0xa0a0a04 encap: VXLAN
+```
+
+When the packet arrived on `leaf04`, it uses the L3VNI from the packet header to identify which IP-VRF table to lookup.
+```
+leaf04# show ip route 192.168.200.10 vrf TN-A 
+IP Route Table for VRF "TN-A"
+'*' denotes best ucast next-hop
+'**' denotes best mcast next-hop
+'[x/y]' denotes [preference/metric]
+'%<string>' in via output denotes VRF <string>
+
+192.168.200.10/32, ubest/mbest: 1/0, attached
+    *via 192.168.200.10, Vlan200, [190/0], 01:08:51, hmm
+```
+
+`leaf04` nows where to forward the packet - `VLAN200` IRB interface, it will then perform arp lookup on it local arp table
+```
+leaf04# show ip arp vrf TN-A | be Address
+Address         Age       MAC Address     Interface       Flags
+192.168.100.7   00:09:22  aabb.cc00.7000  Vlan100                  
+192.168.200.10  00:02:04  aabb.cc00.a000  Vlan200
+```
