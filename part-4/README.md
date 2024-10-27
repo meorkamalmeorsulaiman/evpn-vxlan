@@ -273,7 +273,7 @@ Sending 5, 100-byte ICMP Echos to 192.168.100.8, timeout is 2 seconds:
 Success rate is 80 percent (4/5), round-trip min/avg/max = 7/16/30 ms
 ```
 
-That's work. At this point, we still using ingress replication where the switch will unicast all the packet to all the leaf
+That's work. At this point, we still using ingress replication where the switch will unicast all the packet to all the leaf and the Type-2 help?
 ```
 leaf03# show nve vni 1000
 Codes: CP - Control Plane        DP - Data Plane          
