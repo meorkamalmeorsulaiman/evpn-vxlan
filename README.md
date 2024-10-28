@@ -26,3 +26,4 @@ We device the lab into separated section:
 - Part-3: Forwarding BUM traffic
 - Part-4: Turning on BGP-EVPN on VxLAN Fabric
 - Part-5: Inter-Subnet forwarding
+- Part-6: Reducing layer-2 flooding
