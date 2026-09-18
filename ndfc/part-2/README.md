@@ -6,7 +6,7 @@
 
 ![Sw IP](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-ip.png)
 
-![Sw Onboard](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-onbaord.png)
+![Sw Onboard](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-onboard.png)
 
 Wait untill all swithces status added and close the window
 
