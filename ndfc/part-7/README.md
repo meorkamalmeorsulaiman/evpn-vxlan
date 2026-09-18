@@ -47,3 +47,31 @@ Legend:
 C 2300     aabb.cc01.1020   dynamic  NA         F      F    nve1(10.3.0.2)
 C 2300     aabb.cc01.2000   dynamic  NA         F      F    nve1(10.3.0.2)
 ```
+
+Control plane
+```
+leaf05# show bgp l2vpn evpn vni-id 30000
+BGP routing table information for VRF default, address family L2VPN EVPN
+BGP table version is 59, Local Router ID is 10.2.0.2
+Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
+Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-i
+njected
+Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - b
+est2
+
+   Network            Next Hop            Metric     LocPrf     Weight Path
+Route Distinguisher: 10.2.0.2:35067    (L2VNI 30000)
+*>i[2]:[0]:[0]:[48]:[5007.0000.1b08]:[0]:[0.0.0.0]/216
+                      10.3.0.5                          100          0 i
+*>i[2]:[0]:[0]:[48]:[5008.0000.1b08]:[0]:[0.0.0.0]/216
+                      30.10.0.1                         100          0 64522 i
+*>l[2]:[0]:[0]:[48]:[aabb.cc00.b000]:[0]:[0.0.0.0]/216
+                      10.3.0.4                          100      32768 i
+*>i[2]:[0]:[0]:[48]:[aabb.cc01.1020]:[0]:[0.0.0.0]/216
+                      10.3.0.2                          100          0 i
+* i                   10.3.0.2                          100          0 i
+* i[2]:[0]:[0]:[48]:[aabb.cc01.2000]:[0]:[0.0.0.0]/216
+                      10.3.0.2                          100          0 i
+*>i                   10.3.0.2                          100          0 i
+```
+
