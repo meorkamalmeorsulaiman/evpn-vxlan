@@ -30,4 +30,12 @@ Make sure switch in normal mode
 
 ![Sw set vpc 2](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-vpc-2.png)
 
+# Recalculate and Deploy
+
+![Sw deploy 1](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-deploy-1.png)
+
+![Sw deploy 2](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-deploy-2.png)
+
+![Sw deploy 3](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-2/images/ndfc/2-sw-deploy-3.png)
+
 
