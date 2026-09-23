@@ -110,6 +110,22 @@ BGP community entries [0/0], BGP clusterlist entries [3/12]
 Neighbor        V    AS    MsgRcvd    MsgSent   TblVer  InQ OutQ Up/Down  State/
 PfxRcd
 10.33.0.6       4 64541          7          5       13    0    0 00:01:12 4 
+
+R12#show bgp ipv4 uni summary 
+BGP router identifier 10.1.1.12, local AS number 64541
+BGP table version is 5, main routing table version 5
+4 network entries using 576 bytes of memory
+4 path entries using 336 bytes of memory
+3/3 BGP path/bestpath attribute entries using 480 bytes of memory
+2 BGP AS-PATH entries using 48 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 1440 total bytes of memory
+BGP activity 4/0 prefixes, 4/0 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.12.17.17     4        64512      73      71        5    0    0 01:01:30        3
+10.33.0.5       4        64521      14      17        5    0    0 00:10:17        0
 ```
 
 Few type-5 routes added in the ip-vrf table
