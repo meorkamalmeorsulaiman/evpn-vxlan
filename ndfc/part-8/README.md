@@ -111,3 +111,42 @@ Neighbor        V    AS    MsgRcvd    MsgSent   TblVer  InQ OutQ Up/Down  State/
 PfxRcd
 10.33.0.6       4 64541          7          5       13    0    0 00:01:12 4 
 ```
+
+Few type-5 routes added in the ip-vrf table
+```
+bgw07# show bgp l2vpn evpn vni-id 50000
+BGP routing table information for VRF default, address family L2VPN EVPN
+BGP table version is 40, Local Router ID is 10.2.0.5
+Status: s-suppressed, x-deleted, S-stale, d-dampened, h-history, *-valid, >-best
+Path type: i-internal, e-external, c-confed, l-local, a-aggregate, r-redist, I-i
+njected
+Origin codes: i - IGP, e - EGP, ? - incomplete, | - multipath, & - backup, 2 - b
+est2
+
+   Network            Next Hop            Metric     LocPrf     Weight Path
+Route Distinguisher: 10.2.0.5:4    (L3VNI 50000)
+*>i[2]:[0]:[0]:[48]:[5003.0000.1b08]:[0]:[0.0.0.0]/216
+                      10.3.0.2                          100          0 i
+*>i[2]:[0]:[0]:[48]:[5004.0000.1b08]:[0]:[0.0.0.0]/216
+                      10.3.0.2                          100          0 i
+*>l[2]:[0]:[0]:[48]:[5007.0000.1b08]:[0]:[0.0.0.0]/216
+                      10.3.0.5                          100      32768 i
+*>l[5]:[0]:[0]:[0]:[0.0.0.0]/224
+                      10.3.0.5                          100      32768 i
+*>l[5]:[0]:[0]:[24]:[192.168.23.0]/224
+                      10.3.0.5                                       0 64541 64512 i
+*>l[5]:[0]:[0]:[24]:[192.168.24.0]/224
+                      10.3.0.5                                       0 64541 64512 i
+*>l[5]:[0]:[0]:[32]:[10.5.0.1]/224
+                      10.3.0.5                 0        100      32768 ?
+*>l[5]:[0]:[0]:[32]:[10.5.0.2]/224
+                      10.3.0.5                 0        100          0 ?
+*>l[5]:[0]:[0]:[32]:[10.5.0.3]/224
+                      10.3.0.5                 0        100          0 ?
+*>l[5]:[0]:[0]:[32]:[10.5.0.4]/224
+                      10.3.0.5                 0        100          0 ?
+*>l[5]:[0]:[0]:[32]:[12.12.12.12]/224
+                      10.3.0.5                 0                     0 64541 i
+*>l[5]:[0]:[0]:[32]:[14.14.14.14]/224
+                      10.3.0.5                                       0 64541 64512 64542 i
+```
