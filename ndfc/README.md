@@ -19,3 +19,7 @@ The lab will build multi-site fabric with 2 seperate data-center. Each DC runnin
 ![Lab Topo](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-9/images/ndfc/0-lab-topo.png)
 
 ## Forwarding
+
+Below illustrate the forwarding within the fabric where ARP Request generated. 
+
+![Lab ARP Req](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-9/images/ndfc/0-lab-arp-req.png)
