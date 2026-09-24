@@ -8,7 +8,7 @@ This section is an example use-case of deploying VxLAN-EVPN fabric and migration
 
 ## Lab Setup
 
-Each segment in the lab were devided into multiple AS:
+The lab will build multi-site fabric with 2 seperate data-center. Each DC running different AS number. A layer 3 network as inter-side network will providing connectivity between two fabrics. A simple traditional network and connected to new fabric. This will help to simulate the migration steps. 2 external connectivity will be use to validate connection toward outside of the fabric. Each segment in the lab were devided into multiple AS:
 - AS64521 - DC01
 - AS64522 - DC02
 - AS64531 - ISN01
@@ -16,6 +16,6 @@ Each segment in the lab were devided into multiple AS:
 - AS64541 - ISP01
 - AS64542 - ISP02
 
-The lab will build multi-site fabric with 2 seperated DC running their own AS number. One layer 3 network running AS64531 will providing connectivity between DC01 and DC02. The legacy network created as simple network to simulate migration steps and 2 ISPs are to simulate external connectivity.
-
 ![Lab Topo](https://github.com/meorkamalmeorsulaiman/evpn-vxlan/blob/ndfc-9/images/ndfc/0-lab-topo.png)
+
+## Forwarding
